@@ -298,6 +298,13 @@ if __name__ == "__main__":
                         if intentos >= max_intentos:
                             logging.warning("Máximo de intentos de escucha alcanzado. Saliendo.")
                             break # Salir del bucle interno
+                        
+                        # --- MODIFICACIÓN: Reproducir audio de error secuencial ---
+                        error_audio_path = os.path.join('voice', 'error', f'sombreo_error_{intentos}.mp3')
+                        print(f"Reproduciendo audio de error: {error_audio_path}")
+                        if not play_audio_and_control_servo(error_audio_path, arduino, servo_home_angle_concept=0):
+                             print(f"⚠️ Error al reproducir audio de error y controlar el servo.")
+                        
                         continue # Volver a intentar escuchar
 
                     try:
@@ -346,7 +353,9 @@ if __name__ == "__main__":
                             print(f"❌ Nombre no encontrado. Intento {intentos}/{max_intentos}")
                             logging.info(f"Nombre no encontrado: {nombre}. Intento {intentos}/{max_intentos}")
                             
-                            error_audio_path = os.path.join('voice', 'error', 'sombreo_inicio_error.mp3')
+                            # --- MODIFICACIÓN: Reproducir audio de error secuencial ---
+                            error_audio_path = os.path.join('voice', 'error', f'sombreo_error_{intentos}.mp3')
+                            print(f"Reproduciendo audio de error: {error_audio_path}")
                             if not play_audio_and_control_servo(error_audio_path, arduino, servo_home_angle_concept=0):
                                 print(f"⚠️ Error al reproducir audio de error y controlar el servo.")
 
@@ -359,7 +368,9 @@ if __name__ == "__main__":
                         print(f"❌ No entendí lo que dijiste. Intento {intentos}/{max_intentos}")
                         logging.info(f"No se detectó entendimiento. Intento {intentos}/{max_intentos}")
                         
-                        error_audio_path = os.path.join('voice', 'welcome', 'sombreo_inicio_error.mp3')
+                        # --- MODIFICACIÓN: Reproducir audio de error secuencial ---
+                        error_audio_path = os.path.join('voice', 'error', f'sombreo_error_{intentos}.mp3')
+                        print(f"Reproduciendo audio de error: {error_audio_path}")
                         if not play_audio_and_control_servo(error_audio_path, arduino, servo_home_angle_concept=0):
                             print(f"⚠️ Error al reproducir audio de error y controlar el servo.")
 
