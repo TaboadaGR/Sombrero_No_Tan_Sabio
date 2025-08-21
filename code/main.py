@@ -30,9 +30,9 @@ arduino = None # Variable global para la conexión serial
 # --- Configuración de Nombres y Mesas ---
 nombres_y_mesas = {
     "Juan Maldonado": ("Gryffindor", "mesa_1"),
-    "Maria Lozano Olvera": ("Slytherin", "mesa_2"),
+    "María Lozano Olvera": ("Slytherin", "mesa_2"),
     "Pablo Lozano Olvera": ("Hufflepuff", "mesa_1"),
-    "Alvaro David Taboada": ("Ravenclaw", "mesa_1"), # Asegúrate que el nombre reconocido coincida
+    "Álvaro David Taboada": ("Ravenclaw", "mesa_1"), # Asegúrate que el nombre reconocido coincida
     "Ascenion Olvera Raya": ("Gryffindor", "mesa_1"),
     "Manuel": ("Ravenclaw", "mesa_12"),
     "Pepe": ("Hufflepuff", "mesa_1"),
@@ -43,6 +43,7 @@ nombres_y_mesas = {
     "Jorge Lozano Lozano": ("Ravenclaw", "mesa_2"), # Añadido para el caso específico
     "Silvia Martín Díaz": ("Ravenclaw", "MESA_1")   # Añadido para el caso específico
 }
+
 
 # --- Inicialización del Reconocimiento de Voz ---
 recognizer = sr.Recognizer()
@@ -110,19 +111,19 @@ def read_arduino_feedback(ser_port):
                     if len(parts) == 2 and parts[0].startswith("S1=") and parts[1].startswith("S2="):
                         angle1 = parts[0].split("=")[1]
                         angle2 = parts[1].split("=")[1]
-                        print(f"    [Servo Info]: Servos inician movimiento desde HOME_ANGLE: S1={angle1}°, S2={angle2}°")
+                        print(f"     [Servo Info]: Servos inician movimiento desde HOME_ANGLE: S1={angle1}°, S2={angle2}°")
                 elif feedback.startswith("[FINAL_ANGLE]:"):
                     parts = feedback.split(":")[1:]
                     if len(parts) == 2 and parts[0].startswith("S1=") and parts[1].startswith("S2="):
                         angle1 = parts[0].split("=")[1]
                         angle2 = parts[1].split("=")[1]
-                        print(f"    [Servo Info]: Servos finalizan movimiento en HOME_ANGLE: S1={angle1}°, S2={angle2}°")
+                        print(f"     [Servo Info]: Servos finalizan movimiento en HOME_ANGLE: S1={angle1}°, S2={angle2}°")
                 elif feedback.startswith("[CURRENT_ANGLES]:"):
                     parts = feedback.split(":")[1:]
                     if len(parts) == 2 and parts[0].startswith("S1=") and parts[1].startswith("S2="):
                         angle1 = parts[0].split("=")[1]
                         angle2 = parts[1].split("=")[1]
-                        print(f"    [Servo Info]: S1 a: {angle1}°, S2 a: {angle2}° (Movimiento aleatorio)")
+                        print(f"     [Servo Info]: S1 a: {angle1}°, S2 a: {angle2}° (Movimiento aleatorio)")
                 # Add more conditions for other Arduino debug messages if needed
                 
                 logging.debug(f"Recibido de Arduino: {feedback}")
@@ -236,7 +237,7 @@ if __name__ == "__main__":
     # Reproduce el audio de inicio y controla el servo automáticamente
     print("Reproduciendo audio de bienvenida...")
     # Aquí se pasa el concepto de home_angle (aunque Arduino usa su propio valor)
-    play_audio_and_control_servo('sombreo_inicio_1.mp3', arduino, servo_home_angle_concept=0) 
+    play_audio_and_control_servo(os.path.join('voice', 'welcome', 'sombreo_inicio.mp3'), arduino, servo_home_angle_concept=0) 
     
     try:
         while True:
@@ -260,91 +261,92 @@ if __name__ == "__main__":
                         break # Salir del bucle principal
                     continue # Volver a intentar escuchar
 
-            try:
-                nombre = recognizer.recognize_google(audio, language="es-ES")
-                print(f"👂 Escuché: {nombre}")
-                nombre_formateado = nombre.title() # Pone la primera letra de cada palabra en mayúscula
+                try:
+                    nombre = recognizer.recognize_google(audio, language="es-ES")
+                    print(f"👂 Escuché: {nombre}")
+                    nombre_formateado = nombre.title() # Pone la primera letra de cada palabra en mayúscula
 
-                if nombre_formateado in nombres_y_mesas:
-                    # --- Lógica para nombres específicos (Silvia y Jorge) ---
-                    if nombre_formateado == "Silvia Martín Díaz":
-                        print("Reproduciendo audio de Silvia")
-                        # Reproduce el audio de Silvia y controla el servo
-                        if not play_audio_and_control_servo("silvia.mp3", arduino, servo_home_angle_concept=0):
-                            print(f"⚠️ Error al reproducir audio de Silvia y controlar el servo.")
-                        time.sleep(1) # Pausa entre audios
-                        # Reproduce el audio de la mesa de Silvia y controla el servo
-                        if not play_audio_and_control_servo("MESA_1.mp3", arduino, servo_home_angle_concept=0):
-                            print(f"⚠️ Error al reproducir audio de MESA_1 y controlar el servo.")
-                    elif nombre_formateado == "Jorge Lozano Lozano":
-                        print("Reproduciendo audio de Jorge")
-                        # Reproduce el audio de Jorge y controla el servo
-                        if not play_audio_and_control_servo("jorge.mp3", arduino, servo_home_angle_concept=0):
-                            print(f"⚠️ Error al reproducir audio de Jorge y controlar el servo.")
-                        time.sleep(1) # Pausa entre audios
-                        # Reproduce el audio de la mesa de Jorge y controla el servo
-                        if not play_audio_and_control_servo("mesa_2.mp3", arduino, servo_home_angle_concept=0):
-                            print(f"⚠️ Error al reproducir audio de mesa_2 y controlar el servo.")
-                    # --- Lógica general para otras casas/mesas ---
+                    if nombre_formateado in nombres_y_mesas:
+                        # --- Lógica para nombres específicos (Silvia y Jorge) ---
+                        if nombre_formateado == "Silvia Martín Díaz":
+                            print("Reproduciendo audio de Silvia")
+                            # Reproduce el audio de Silvia y controla el servo
+                            if not play_audio_and_control_servo(os.path.join('voice', 'SilviaJorge', 'silvia_final.mp3'), arduino, servo_home_angle_concept=0):
+                                print(f"⚠️ Error al reproducir audio de Silvia y controlar el servo.")
+                            time.sleep(1) # Pausa entre audios
+                            # Reproduce el audio de la mesa de Silvia y controla el servo
+                            if not play_audio_and_control_servo(os.path.join('voice', 'table', 'MESA_1.mp3'), arduino, servo_home_angle_concept=0):
+                                print(f"⚠️ Error al reproducir audio de MESA_1 y controlar el servo.")
+                        elif nombre_formateado == "Jorge Lozano Lozano":
+                            print("Reproduciendo audio de Jorge")
+                            # Reproduce el audio de Jorge y controla el servo
+                            if not play_audio_and_control_servo(os.path.join('voice', 'SilviaJorge', 'jorge_final.mp3'), arduino, servo_home_angle_concept=0):
+                                print(f"⚠️ Error al reproducir audio de Jorge y controlar el servo.")
+                            time.sleep(1) # Pausa entre audios
+                            # Reproduce el audio de la mesa de Jorge y controla el servo
+                            if not play_audio_and_control_servo(os.path.join('voice', 'table', 'mesa_2.mp3'), arduino, servo_home_angle_concept=0):
+                                print(f"⚠️ Error al reproducir audio de mesa_2 y controlar el servo.")
+                        # --- Lógica general para otras casas/mesas ---
+                        else:
+                            casa, mesa = nombres_y_mesas[nombre_formateado]
+                            print(f"✔️ Nombre reconocido: {nombre_formateado}, Casa: {casa}, Mesa: {mesa}")
+                            logging.info(f"Nombre reconocido: {nombre_formateado}, Casa: {casa}, Mesa: {mesa}")
+
+                            # Reproduce el audio de la casa y controla el servo
+                            audio_casa_path = os.path.join('voice', 'house', f"{casa}_audio.mp3") 
+                            if not play_audio_and_control_servo(audio_casa_path, arduino, servo_home_angle_concept=0):
+                                print(f"⚠️ Error al reproducir audio de casa: {audio_casa_path}. Posible desincronización del servo.")
+
+                            time.sleep(0.5) # Pequeña pausa entre audios si lo necesitas
+
+                            # Reproduce el audio de la mesa y controla el servo
+                            audio_mesa_path = os.path.join('voice', 'table', f"{mesa}.mp3")
+                            if not play_audio_and_control_servo(audio_mesa_path, arduino, servo_home_angle_concept=0):
+                                print(f"⚠️ Error al reproducir audio de mesa: {audio_mesa_path}. Posible desincronización del servo.")
+                        
+                        logging.info("Secuencia de casa/mesa completada.")
+                        break # Salir del bucle principal después de una asignación exitosa
+
                     else:
-                        casa, mesa = nombres_y_mesas[nombre_formateado]
-                        print(f"✔️ Nombre reconocido: {nombre_formateado}, Casa: {casa}, Mesa: {mesa}")
-                        logging.info(f"Nombre reconocido: {nombre_formateado}, Casa: {casa}, Mesa: {mesa}")
+                        intentos += 1
+                        print(f"❌ Nombre no encontrado. Intento {intentos}/{max_intentos}")
+                        logging.info(f"Nombre no encontrado: {nombre}. Intento {intentos}/{max_intentos}")
+                        
+                        # MODIFICACIÓN: Ahora se llama a play_audio_and_control_servo para mover el servo
+                        # CORRECCIÓN: Usar os.path.join para la ruta del audio
+                        error_audio_path = os.path.join('voice', 'error', 'sombreo_inicio_error.mp3')
+                        if not play_audio_and_control_servo(error_audio_path, arduino, servo_home_angle_concept=0):
+                            print(f"⚠️ Error al reproducir audio de error y controlar el servo.")
 
-                        # Reproduce el audio de la casa y controla el servo
-                        audio_casa_path = f"{casa}_audio.mp3" 
-                        if not play_audio_and_control_servo(audio_casa_path, arduino, servo_home_angle_concept=0):
-                            print(f"⚠️ Error al reproducir audio de casa: {audio_casa_path}. Posible desincronización del servo.")
+                        if intentos >= max_intentos:
+                            logging.warning("Máximo de intentos de nombre no encontrado alcanzado. Saliendo.")
+                            break # Salir del bucle principal
 
-                        time.sleep(0.5) # Pequeña pausa entre audios si lo necesitas
-
-                        # Reproduce el audio de la mesa y controla el servo
-                        audio_mesa_path = f"{mesa}.mp3"
-                        if not play_audio_and_control_servo(audio_mesa_path, arduino, servo_home_angle_concept=0):
-                            print(f"⚠️ Error al reproducir audio de mesa: {audio_mesa_path}. Posible desincronización del servo.")
-                    
-                    logging.info("Secuencia de casa/mesa completada.")
-                    break # Salir del bucle principal después de una asignación exitosa
-
-                else:
+                except sr.UnknownValueError:
                     intentos += 1
-                    print(f"❌ Nombre no encontrado. Intento {intentos}/{max_intentos}")
-                    logging.info(f"Nombre no encontrado: {nombre}. Intento {intentos}/{max_intentos}")
+                    print(f"❌ No entendí lo que dijiste. Intento {intentos}/{max_intentos}")
+                    logging.info(f"No se detectó entendimiento. Intento {intentos}/{max_intentos}")
                     
-                    # Se llama a play_audio_and_control_servo para mover el servo
-                    if not play_audio_and_control_servo('sombreo_inicio_error.mp3', arduino, servo_home_angle_concept=0):
+                    # MODIFICACIÓN: Ahora se llama a play_audio_and_control_servo para mover el servo
+                    # CORRECCIÓN: Usar os.path.join para la ruta del audio
+                    error_audio_path = os.path.join('voice', 'welcome', 'sombreo_inicio_error.mp3')
+                    if not play_audio_and_control_servo(error_audio_path, arduino, servo_home_angle_concept=0):
                         print(f"⚠️ Error al reproducir audio de error y controlar el servo.")
 
                     if intentos >= max_intentos:
-                         
-                        logging.warning("Máximo de intentos de nombre no encontrado alcanzado. Saliendo.")
+                        logging.warning("Máximo de intentos de no entendimiento alcanzado. Saliendo.")
                         break # Salir del bucle principal
 
-            except sr.UnknownValueError:
-                intentos += 1
-                print(f"❌ No entendí lo que dijiste. Intento {intentos}/{max_intentos}")
-                logging.info(f"No se detectó entendimiento. Intento {intentos}/{max_intentos}")
-                
-                # Se llama a play_audio_and_control_servo para mover el servo
-                if not play_audio_and_control_servo('sombreo_inicio_error.mp3', arduino, servo_home_angle_concept=0):
-                    print(f"⚠️ Error al reproducir audio de error y controlar el servo.")
+                except sr.RequestError as e:
+                    logging.error(f"Error al solicitar resultados del servicio de reconocimiento de voz de Google; {e}", exc_info=True)
+                    print(f"❌ Error al conectar con el servicio de voz de Google; {e}")
+                    time.sleep(2) # Esperar un poco antes de reintentar
+                    # No incrementamos intentos por problemas de red
 
-                if intentos >= max_intentos:
-                     
-                    logging.warning("Máximo de intentos de no entendimiento alcanzado. Saliendo.")
-                    break # Salir del bucle principal
-
-            except sr.RequestError as e:
-                logging.error(f"Error al solicitar resultados del servicio de reconocimiento de voz de Google; {e}", exc_info=True)
-                print(f"❌ Error al conectar con el servicio de voz de Google; {e}")
-                
-                time.sleep(2) # Esperar un poco antes de reintentar
-                # No incrementamos intentos por problemas de red
-
-            except Exception as e:
-                logging.critical(f"Error inesperado en el bucle principal de reconocimiento: {e}", exc_info=True)
-                print(f"Error inesperado: {e}")
-                break # Salir ante cualquier otro error crítico
+                except Exception as e:
+                    logging.critical(f"Error inesperado en el bucle principal de reconocimiento: {e}", exc_info=True)
+                    print(f"Error inesperado: {e}")
+                    break # Salir ante cualquier otro error crítico
     
     except KeyboardInterrupt:
         print("\nPrograma interrumpido por el usuario (Ctrl+C).")
@@ -356,7 +358,9 @@ if __name__ == "__main__":
         logging.info("Iniciando proceso de limpieza final.")
         # Asegurarse de detener servo y audio al finalizar o salir
         if arduino:
+            print("Enviando comando de parada a Arduino...")
             send_servo_command(arduino, '0') # Comando final para detener el servo
+            time.sleep(0.5)
             close_serial_port(arduino)
         pygame.mixer.quit() # Apagar el mezclador de Pygame
         logging.info("Pygame mixer apagado.")
