@@ -4,9 +4,14 @@ import speech_recognition as sr
 import pyttsx3
 import logging
 import os
+import simplejson as json
+from omegaconf import OmegaConf,DictConfig
 
 from animatronic.serialHat import *
 from animatronic.audioHat import *
+from animatronic.auxiliarHat import *
+
+CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 # --- Configuración del Log ---
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
@@ -23,33 +28,28 @@ logging.basicConfig(
 
 logger = logging.getLogger('main_logger')
 
+configuration = OmegaConf.load(os.path.join(CURRENT_PATH,'configuration.yaml'))
+
 # --- Configuración del Sintetizador de Voz (pyttsx3) ---
 engine = pyttsx3.init()
-engine.setProperty('rate', 180) # Velocidad de la voz (ajusta entre 150-250 para voz natural)
-engine.setProperty('volume', 0.9) # Volumen (0.0 a 1.0)
+engine.setProperty('rate', configuration.get('pyttsx3',{}).get('rate','180')) # Velocidad de la voz (ajusta entre 150-250 para voz natural)
+engine.setProperty('volume', configuration.get('pyttsx3',{}).get('volume','0.9')) # Volumen (0.0 a 1.0)
 
 # --- Configuración del Puerto Serial de Arduino ---
-ARDUINO_PORT = 'COM4' # <--- ¡CAMBIA ESTO A TU PUERTO ARDUINO REAL!
-BAUD_RATE = 9600
+ARDUINO_PORT = configuration.get('arduino',{}).get('port','COM4') # <--- ¡CAMBIA ESTO A TU PUERTO ARDUINO REAL!
+BAUD_RATE = int(configuration.get('arduino',{}).get('baud_rate','9600'))
 
 arduino = None # Variable global para la conexión serial
 
 # --- Configuración de Nombres y Mesas ---
-nombres_y_mesas = {
-    "Juan Maldonado": ("Gryffindor", "mesa_1"),
-    "Maria Lozano Olvera": ("Slytherin", "mesa_2"),
-    "Pablo Lozano Olvera": ("Hufflepuff", "mesa_1"),
-    "Alvaro David Taboada": ("Ravenclaw", "mesa_1"), # Asegúrate que el nombre reconocido coincida
-    "Ascenion Olvera Raya": ("Gryffindor", "mesa_1"),
-    "Manuel": ("Ravenclaw", "mesa_12"),
-    "Pepe": ("Hufflepuff", "mesa_1"),
-    "Antonio": ("Ravenclaw", "mesa_1"),
-    "Lucia": ("Gryffindor", "mesa_1"),
-    "Alvaro": ("Ravenclaw", "mesa_2"), # Versión corta si se reconoce así
-    "Pablo": ("Gryffindor", "mesa_1"), # Si hay dos "Pablo", el primero en la lista será el que se use
-    "Jorge Lozano Lozano": ("Ravenclaw", "mesa_2"), # Añadido para el caso específico
-    "Silvia Martín Díaz": ("Ravenclaw", "MESA_1")   # Añadido para el caso específico
-}
+
+
+nombres_y_mesas = None
+
+with open(configuration.get('names_file','nombres_y_mesas.json'),'r') as istream:
+    nombres_y_mesas = raw_names_to_expected_format(json.load(istream))
+
+logger.info(f'Expected names: {nombres_y_mesas}')
 
 # --- Inicialización del Reconocimiento de Voz ---
 try:
@@ -82,7 +82,7 @@ if __name__ == "__main__":
         time.sleep(0.5) # Pequeña pausa para que el servo se asiente
 
     print("\n¡Bienvenido al Sombrero Seleccionador!")
-    logging.info("Iniciando secuencia del Sombrero Seleccionador.")
+    logger.info("Iniciando secuencia del Sombrero Seleccionador.")
 
     # Reproduce el audio de inicio y controla el servo automáticamente
     print("Reproduciendo audio de bienvenida...")
@@ -107,7 +107,7 @@ if __name__ == "__main__":
                     intentos += 1
                     if intentos >= max_intentos:
                          
-                        logging.warning("Máximo de intentos de escucha alcanzado. Saliendo.")
+                        logger.warning("Máximo de intentos de escucha alcanzado. Saliendo.")
                         break # Salir del bucle principal
                     continue # Volver a intentar escuchar
 
@@ -140,7 +140,7 @@ if __name__ == "__main__":
                     else:
                         casa, mesa = nombres_y_mesas[nombre_formateado]
                         print(f"✔️ Nombre reconocido: {nombre_formateado}, Casa: {casa}, Mesa: {mesa}")
-                        logging.info(f"Nombre reconocido: {nombre_formateado}, Casa: {casa}, Mesa: {mesa}")
+                        logger.info(f"Nombre reconocido: {nombre_formateado}, Casa: {casa}, Mesa: {mesa}")
 
                         # Reproduce el audio de la casa y controla el servo
                         audio_casa_path = f"{casa}_audio.mp3" 
@@ -154,13 +154,13 @@ if __name__ == "__main__":
                         if not play_audio_and_control_servo(audio_mesa_path, arduino, servo_home_angle_concept=0):
                             print(f"⚠️ Error al reproducir audio de mesa: {audio_mesa_path}. Posible desincronización del servo.")
                     
-                    logging.info("Secuencia de casa/mesa completada.")
+                    logger.info("Secuencia de casa/mesa completada.")
                     break # Salir del bucle principal después de una asignación exitosa
 
                 else:
                     intentos += 1
                     print(f"❌ Nombre no encontrado. Intento {intentos}/{max_intentos}")
-                    logging.info(f"Nombre no encontrado: {nombre}. Intento {intentos}/{max_intentos}")
+                    logger.info(f"Nombre no encontrado: {nombre}. Intento {intentos}/{max_intentos}")
                     
                     # Se llama a play_audio_and_control_servo para mover el servo
                     if not play_audio_and_control_servo('sombreo_inicio_error.mp3', arduino, servo_home_angle_concept=0):
@@ -168,13 +168,13 @@ if __name__ == "__main__":
 
                     if intentos >= max_intentos:
                          
-                        logging.warning("Máximo de intentos de nombre no encontrado alcanzado. Saliendo.")
+                        logger.warning("Máximo de intentos de nombre no encontrado alcanzado. Saliendo.")
                         break # Salir del bucle principal
 
             except sr.UnknownValueError:
                 intentos += 1
                 print(f"❌ No entendí lo que dijiste. Intento {intentos}/{max_intentos}")
-                logging.info(f"No se detectó entendimiento. Intento {intentos}/{max_intentos}")
+                logger.info(f"No se detectó entendimiento. Intento {intentos}/{max_intentos}")
                 
                 # Se llama a play_audio_and_control_servo para mover el servo
                 if not play_audio_and_control_servo('sombreo_inicio_error.mp3', arduino, servo_home_angle_concept=0):
@@ -182,34 +182,34 @@ if __name__ == "__main__":
 
                 if intentos >= max_intentos:
                      
-                    logging.warning("Máximo de intentos de no entendimiento alcanzado. Saliendo.")
+                    logger.warning("Máximo de intentos de no entendimiento alcanzado. Saliendo.")
                     break # Salir del bucle principal
 
             except sr.RequestError as e:
-                logging.error(f"Error al solicitar resultados del servicio de reconocimiento de voz de Google; {e}", exc_info=True)
+                logger.error(f"Error al solicitar resultados del servicio de reconocimiento de voz de Google; {e}", exc_info=True)
                 print(f"❌ Error al conectar con el servicio de voz de Google; {e}")
                 
                 time.sleep(2) # Esperar un poco antes de reintentar
                 # No incrementamos intentos por problemas de red
 
             except Exception as e:
-                logging.critical(f"Error inesperado en el bucle principal de reconocimiento: {e}", exc_info=True)
+                logger.critical(f"Error inesperado en el bucle principal de reconocimiento: {e}", exc_info=True)
                 print(f"Error inesperado: {e}")
                 break # Salir ante cualquier otro error crítico
     
     except KeyboardInterrupt:
         print("\nPrograma interrumpido por el usuario (Ctrl+C).")
-        logging.info("Programa interrumpido por usuario.")
+        logger.info("Programa interrumpido por usuario.")
     except Exception as e:
-        logging.critical(f"Error general en el programa: {e}", exc_info=True)
+        logger.critical(f"Error general en el programa: {e}", exc_info=True)
         print(f"Error general inesperado: {e}")
     finally:
-        logging.info("Iniciando proceso de limpieza final.")
+        logger.info("Iniciando proceso de limpieza final.")
         # Asegurarse de detener servo y audio al finalizar o salir
         if arduino:
             send_servo_command(arduino, '0') # Comando final para detener el servo
             close_serial_port(arduino)
         pygame.mixer.quit() # Apagar el mezclador de Pygame
-        logging.info("Pygame mixer apagado.")
+        logger.info("Pygame mixer apagado.")
         print("Pygame mixer apagado.")
         print("Programa finalizado.")

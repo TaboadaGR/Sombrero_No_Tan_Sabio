@@ -1,0 +1,7 @@
+names_file: /home/dietpi/workbench/Sombrero_No_Tan_Sabio/code/python/nombres_y_mesas.json
+arduino:
+  port: COM4
+  baud_rate: 9600
+pyttsx3:
+  rate: 180
+  volume: 0.9
