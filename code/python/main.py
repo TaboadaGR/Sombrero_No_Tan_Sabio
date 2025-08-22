@@ -16,9 +16,10 @@ import typer
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 
+configuration = OmegaConf.load(os.path.join(CURRENT_PATH,'configuration.yaml'))
+
 # --- Configuración del Log ---
-desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
-log_file = os.path.join(desktop_path, "log_sombrero_seleccionador.txt")
+log_file =configuration.get('log_file')
 
 log_handlers = [logging.FileHandler(log_file),logging.StreamHandler()]
 log_level = logging.INFO
@@ -30,8 +31,6 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger('main_logger')
-
-configuration = OmegaConf.load(os.path.join(CURRENT_PATH,'configuration.yaml'))
 
 # --- Configuración del Sintetizador de Voz (pyttsx3) ---
 engine = pyttsx3.init()
