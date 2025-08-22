@@ -10,11 +10,16 @@ import os
 desktop_path = os.path.join(os.path.expanduser("~"), "Desktop")
 log_file = os.path.join(desktop_path, "log_sombrero_seleccionador.txt")
 
+log_handlers = [logging.FileHandler(log_file),logging.StreamHandler()]
+log_level = logging.INFO
+log_format = '%(asctime)s - %(levelname)s - %(message)s'
 logging.basicConfig(
-    filename=log_file,
-    level=logging.INFO, # Nivel de log por defecto (INFO, DEBUG, WARNING, ERROR, CRITICAL)
-    format='%(asctime)s - %(levelname)s - %(message)s'
+    level=log_level, # Nivel de log por defecto (INFO, DEBUG, WARNING, ERROR, CRITICAL)
+    format=log_format,
+    handlers=log_handlers
 )
+
+logger = logging.getLogger(__file__)
 
 # --- Configuración del Sintetizador de Voz (pyttsx3) ---
 engine = pyttsx3.init()
@@ -45,8 +50,13 @@ nombres_y_mesas = {
 }
 
 # --- Inicialización del Reconocimiento de Voz ---
-recognizer = sr.Recognizer()
-mic = sr.Microphone()
+try:
+    recognizer = sr.Recognizer()
+    mic = sr.Microphone()
+except Exception as e:
+    logger.error(f'ERROR configurando recognizer or mic: {e}')
+    recognizer = None
+    mic = None
 
 intentos = 0
 max_intentos = 3 # Número máximo de intentos antes de salir
@@ -215,8 +225,12 @@ def play_sound_effect(file_path):
         logging.error(f"Error al reproducir efecto de sonido '{file_path}': {e}", exc_info=True)
         print(f"Error al reproducir efecto de sonido: {e}")
         return False
+    
 # --- Bucle principal del programa ---
 if __name__ == "__main__":
+
+    if (mic is None) or( recognizer is None):
+        logger.critical('No se pudo ')
     # 1. Inicializar Audio de Pygame
     if not init_pygame_mixer():
         print("No se pudo iniciar el sistema de audio. Saliendo.")
