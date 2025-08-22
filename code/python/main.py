@@ -1,4 +1,5 @@
 import time
+import datetime
 import pygame
 import speech_recognition as sr
 import pyttsx3
@@ -10,6 +11,8 @@ from omegaconf import OmegaConf,DictConfig
 from animatronic.serialHat import *
 from animatronic.audioHat import *
 from animatronic.auxiliarHat import *
+
+import typer
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -62,10 +65,18 @@ except Exception as e:
 
 intentos = 0
 max_intentos = 3 # Número máximo de intentos antes de salir
-    
-# --- Bucle principal del programa ---
-if __name__ == "__main__":
 
+app = typer.Typer()
+
+@app.command()
+def fake():
+    while True:
+        logger.info(f'Actualiza el servicio...{datetime.datetime.now()}')
+        time.sleep(10)
+
+
+@app.command()
+def start():
     if (mic is None) or( recognizer is None):
         logger.critical('No se pudo ')
     # 1. Inicializar Audio de Pygame
@@ -213,3 +224,7 @@ if __name__ == "__main__":
         logger.info("Pygame mixer apagado.")
         print("Pygame mixer apagado.")
         print("Programa finalizado.")
+    
+# --- Bucle principal del programa ---
+if __name__ == "__main__":
+    app()

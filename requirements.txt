@@ -1,10 +1,17 @@
 antlr4-python3-runtime==4.9.3
+click==8.2.1
+markdown-it-py==4.0.0
+mdurl==0.1.2
 omegaconf==2.3.0
 PyAudio==0.2.14
 pygame==2.6.1
+Pygments==2.19.2
 pyserial==3.5
 pyttsx3==2.99
 PyYAML==6.0.2
+rich==14.1.0
+shellingham==1.5.4
 simplejson==3.20.1
 SpeechRecognition==3.14.3
+typer==0.16.1
 typing_extensions==4.14.1
