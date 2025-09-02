@@ -41,10 +41,10 @@ nombres_y_mesas = {
     "Pepe": ("Hufflepuff", "mesa_1"),
     "Antonio": ("Ravenclaw", "mesa_1"),
     "Lucia": ("Gryffindor", "mesa_1"),
-    "Alvaro": ("Ravenclaw", "mesa_2"), # Versión corta si se reconoce así
-    "Pablo": ("Gryffindor", "mesa_1"), # Si hay dos "Pablo", el primero en la lista será el que se use
-    "Jorge Lozano Lozano": ("Ravenclaw", "mesa_2"), # Añadido para el caso específico
-    "Silvia Martín Díaz": ("Ravenclaw", "MESA_1") # Añadido para el caso específico
+    "Alvaro": ("Ravenclaw", "mesa_2"), 
+    "Pablo": ("Gryffindor", "mesa_1"), 
+    "Jorge Lozano Lozano": ("Ravenclaw", "mesa_2"), 
+    "Silvia Martín Díaz": ("Ravenclaw", "MESA_1") 
 }
 
 # --- Inicialización del Reconocimiento de Voz ---
