@@ -32,11 +32,11 @@ arduino = None
 
 # --- Configuración de Nombres y Mesas ---
 nombres_y_mesas = {
-    "Jorge Gardón": ("Gryffindor", "mesa_12"),
-    "Silvia Martín Díaz": ("Slytherin", "mesa_12"),
-    "Agustín Martín": ("Hufflepuff", "mesa_12"),
-    "Silvia Díaz": ("Ravenclaw", "mesa_12"),
-    "Yolanda Gardón": ("Muggle", "mesa_12"),
+    "Jorge Gardón": ("Gryffindor", "mesa_13"),
+    "Silvia Martín Díaz": ("Slytherin", "mesa_13"),
+    "Agustín Martín": ("Hufflepuff", "mesa_13"),
+    "Silvia Díaz": ("Ravenclaw", "mesa_13"),
+    "Yolanda Gardón": ("Muggle", "mesa_13"),
     "Maria Angustias Gardón": ("Gryffindor", "mesa_1"),
     "Jose Manuel Ramirez": ("Slytherin", "mesa_1"),
     "Rosa Gardón": (None, "mesa_1"),
@@ -389,14 +389,14 @@ if __name__ == "__main__":
                                 if not play_audio_and_control_servo(os.path.join('voice', 'SilviaJorge', 'silvia_final.mp3'), arduino, servo_home_angle_concept=0):
                                     print(f"⚠️ Error al reproducir audio de Silvia y controlar el servo.")
                                 time.sleep(1) 
-                                if not play_audio_and_control_servo(os.path.join('voice', 'table', 'MESA_12.mp3'), arduino, servo_home_angle_concept=0):
+                                if not play_audio_and_control_servo(os.path.join('voice', 'table', 'mesa_13.mp3'), arduino, servo_home_angle_concept=0):
                                     print(f"⚠️ Error al reproducir audio de MESA_1 y controlar el servo.")
                             elif nombre_formateado == "Jorge Gardón":
                                 print("Reproduciendo audio de Jorge")
                                 if not play_audio_and_control_servo(os.path.join('voice', 'SilviaJorge', 'jorge_final.mp3'), arduino, servo_home_angle_concept=0):
                                     print(f"⚠️ Error al reproducir audio de Jorge y controlar el servo.")
                                 time.sleep(1) 
-                                if not play_audio_and_control_servo(os.path.join('voice', 'table', 'mesa_12.mp3'), arduino, servo_home_angle_concept=0):
+                                if not play_audio_and_control_servo(os.path.join('voice', 'table', 'mesa_13.mp3'), arduino, servo_home_angle_concept=0):
                                     print(f"⚠️ Error al reproducir audio de mesa_2 y controlar el servo.")
                             else:
                                 casa, mesa = nombres_y_mesas[nombre_formateado]
