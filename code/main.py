@@ -32,19 +32,103 @@ arduino = None
 
 # --- Configuración de Nombres y Mesas ---
 nombres_y_mesas = {
-    "Juan Maldonado": ("Gryffindor", "mesa_1"),
-    "María Lozano Olvera": ("Slytherin", "mesa_2"),
-    "Pablo Lozano Olvera": ("Hufflepuff", "mesa_1"),
-    "Álvaro David Taboada": ("Ravenclaw", "mesa_1"),
-    "Ascenion Olvera Raya": ("Gryffindor", "mesa_1"),
-    "Manuel": ("Ravenclaw", "mesa_12"),
-    "Pepe": ("Hufflepuff", "mesa_1"),
-    "Antonio": ("Ravenclaw", "mesa_1"),
-    "Lucia": ("Gryffindor", "mesa_1"),
-    "Alvaro": ("Ravenclaw", "mesa_2"), 
-    "Pablo": ("Gryffindor", "mesa_1"), 
-    "Jorge Lozano Lozano": ("Ravenclaw", "mesa_2"), 
-    "Silvia Martín Díaz": ("Ravenclaw", "MESA_1") 
+    "Jorge Gardón": ("Gryffindor", "mesa_12"),
+    "Silvia Martín Díaz": ("Slytherin", "mesa_12"),
+    "Agustín Martín": ("Hufflepuff", "mesa_12"),
+    "Silvia Díaz": ("Ravenclaw", "mesa_12"),
+    "Yolanda Gardón": ("Muggle", "mesa_12"),
+    "Maria Angustias Gardón": ("Gryffindor", "mesa_1"),
+    "Jose Manuel Ramirez": ("Slytherin", "mesa_1"),
+    "Rosa Gardón": (None, "mesa_1"),
+    "Carmen Clavero": (None, "mesa_1"),
+    "Maria Angustias Ramírez": (None, "mesa_1"),
+    "Fermín Balderas": (None, "mesa_1"),
+    "Christian Balderas": (None, "mesa_1"),
+    "Lucas Balderas": (None, "mesa_1"),
+    "Violeta Rodríguez": (None, "mesa_1"),
+    "Ramón Gardón": (None, "mesa_1"),
+    "Rocío Sánchez": (None, "mesa_1"),
+    "Carmen Gardón": (None, "mesa_1"),
+    "Maribel Díaz": (None, "mesa_2"),
+    "José Antonio Frías": (None, "mesa_2"),
+    "Mario Díaz": (None, "mesa_2"),
+    "Belén Quesada": (None, "mesa_2"),
+    "Maria del Carmen Díaz": (None, "mesa_2"),
+    "Maria Reyes Díaz": (None, "mesa_2"),
+    "Juan de Dios Ariza": (None, "mesa_2"),
+    "Iván Martín": (None, "mesa_3"),
+    "Maria Werfel": (None, "mesa_3"),
+    "Daniel Ariza": (None, "mesa_3"),
+    "Claudia Ramal": (None, "mesa_3"),
+    "Alejandro Ariza": (None, "mesa_3"),
+    "Lorena Frías": (None, "mesa_3"),
+    "Manuel Frías": (None, "mesa_3"),
+    "Inmaculada": (None, "mesa_3"),
+    "Belén Díaz": (None, "mesa_3"),
+    "Alejandro Cervera": (None, "mesa_4"),
+    "Mónica Carrasco": (None, "mesa_4"),
+    "Rocío Carrasco": (None, "mesa_4"),
+    "Alberto Aragón": (None, "mesa_4"),
+    "Javier Quirosa": (None, "mesa_4"),
+    "Marina Martín": (None, "mesa_4"),
+    "Estrella Quirosa": (None, "mesa_4"),
+    "Javier Alvarez": (None, "mesa_4"),
+    "Aiden Alvarez": (None, "mesa_4"),
+    "Gillian Alvarez": (None, "mesa_4"),
+    "Olver Calvo": (None, "mesa_5"),
+    "Ester Moreno": (None, "mesa_5"),
+    "Nil Calvo": (None, "mesa_5"),
+    "Sión Calvo": (None, "mesa_5"),
+    "Paco Aguilar": (None, "mesa_5"),
+    "Antonio Lachica": (None, "mesa_5"),
+    "Javier Gallegos": (None, "mesa_5"),
+    "Inmaculada Morillas": (None, "mesa_5"),
+    "Silvia": (None, "mesa_5"),
+    "Isabel Arnau": (None, "mesa_5"),
+    "Francisco Romero": (None, "mesa_6"),
+    "Jorge Lemus": (None, "mesa_6"),
+    "David Bermejo": (None, "mesa_6"),
+    "David Guerra": (None, "mesa_6"),
+    "Ysmary Gil": (None, "mesa_6"),
+    "Victoria Sofia Guerra": (None, "mesa_6"),
+    "Juan Carbonell": (None, "mesa_6"),
+    "Irene Burgos": (None, "mesa_7"),
+    "Noemí Fernández": (None, "mesa_7"),
+    "Vicente García": (None, "mesa_7"),
+    "Laura Gregorio": (None, "mesa_7"),
+    "Sofía Atanasov": (None, "mesa_7"),
+    "Atanas Atanasov": (None, "mesa_7"),
+    "Juan Antonio Gregorio": (None, "mesa_7"),
+    "María Albertuz": (None, "mesa_7"),
+    "Noelia Herrera": (None, "mesa_8"),
+    "David Higueras": (None, "mesa_8"),
+    "Sofía Higueras": (None, "mesa_8"),
+    "Ana María Ferández": (None, "mesa_8"),
+    "Jose Espinosa": (None, "mesa_8"),
+    "Angela Espinosa": (None, "mesa_8"),
+    "Jose Antonio Espinosa": (None, "mesa_8"),
+    "Cristina Cabello": (None, "mesa_8"),
+    "Jose Sánchez": (None, "mesa_8"),
+    "Jose Antonio Sánchez": (None, "mesa_8"),
+    "Marta Sánchez": (None, "mesa_8"),
+    "David": (None, "mesa_8"),
+    "Alvaro David Taboada": (None, "mesa_9"),
+    "Lucía Fernández": (None, "mesa_9"),
+    "Esteban Fernández": (None, "mesa_9"),
+    "Jorge Zapata": (None, "mesa_9"),
+    "Celia Hernández": (None, "mesa_9"),
+    "Julián Fernández": (None, "mesa_9"),
+    "Miguel Córdoba": (None, "mesa_9"),
+    "Belén Gázquez": (None, "mesa_9"),
+    "Patricio Martinez": (None, "mesa_9"),
+    "Pablo Lozano": (None, "mesa_9"),
+    "Raúl Romero": (None, "mesa_10"),
+    "Marta Rodriguez": (None, "mesa_10"),
+    "Alexander Vas": (None, "mesa_10"),
+    "Sandra Navarro": (None, "mesa_10"),
+    "Ricardo Cañuelo": (None, "mesa_10"),
+    "Marina Muñoz": (None, "mesa_10"),
+    "Beni": (None, "mesa_10")
 }
 
 # --- Inicialización del Reconocimiento de Voz ---
@@ -305,14 +389,14 @@ if __name__ == "__main__":
                                 if not play_audio_and_control_servo(os.path.join('voice', 'SilviaJorge', 'silvia_final.mp3'), arduino, servo_home_angle_concept=0):
                                     print(f"⚠️ Error al reproducir audio de Silvia y controlar el servo.")
                                 time.sleep(1) 
-                                if not play_audio_and_control_servo(os.path.join('voice', 'table', 'MESA_1.mp3'), arduino, servo_home_angle_concept=0):
+                                if not play_audio_and_control_servo(os.path.join('voice', 'table', 'MESA_12.mp3'), arduino, servo_home_angle_concept=0):
                                     print(f"⚠️ Error al reproducir audio de MESA_1 y controlar el servo.")
-                            elif nombre_formateado == "Jorge Lozano Lozano":
+                            elif nombre_formateado == "Jorge Gardón":
                                 print("Reproduciendo audio de Jorge")
                                 if not play_audio_and_control_servo(os.path.join('voice', 'SilviaJorge', 'jorge_final.mp3'), arduino, servo_home_angle_concept=0):
                                     print(f"⚠️ Error al reproducir audio de Jorge y controlar el servo.")
                                 time.sleep(1) 
-                                if not play_audio_and_control_servo(os.path.join('voice', 'table', 'mesa_2.mp3'), arduino, servo_home_angle_concept=0):
+                                if not play_audio_and_control_servo(os.path.join('voice', 'table', 'mesa_12.mp3'), arduino, servo_home_angle_concept=0):
                                     print(f"⚠️ Error al reproducir audio de mesa_2 y controlar el servo.")
                             else:
                                 casa, mesa = nombres_y_mesas[nombre_formateado]
