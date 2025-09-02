@@ -15,20 +15,20 @@ log_file = os.path.join(desktop_path, "log_sombrero_seleccionador.txt")
 
 logging.basicConfig(
     filename=log_file,
-    level=logging.INFO, # Nivel de log por defecto (INFO, DEBUG, WARNING, ERROR, CRITICAL)
+    level=logging.INFO, 
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
 
-# --- Configuración del Sintetizador de Voz (pyttsx3) ---
+
 engine = pyttsx3.init()
-engine.setProperty('rate', 180) # Velocidad de la voz (ajusta entre 150-250 para voz natural)
-engine.setProperty('volume', 0.9) # Volumen (0.0 a 1.0)
+engine.setProperty('rate', 180) 
+engine.setProperty('volume', 0.9) 
 
 # --- Configuración del Puerto Serial de Arduino ---
-ARDUINO_PORT = 'COM4' # <--- ¡CAMBIA ESTO A TU PUERTO ARDUINO REAL!
+ARDUINO_PORT = 'COM4' 
 BAUD_RATE = 9600
 
-arduino = None # Variable global para la conexión serial
+arduino = None 
 
 # --- Configuración de Nombres y Mesas ---
 nombres_y_mesas = {
@@ -72,14 +72,14 @@ def send_servo_command(ser_port, command):
     """Envía un comando '1' (mover) o '0' (detener) al servo a través de Arduino."""
     if ser_port and ser_port.is_open:
         try:
-            message = f"{command}\n" # Añade salto de línea para que Arduino sepa cuándo termina el comando
-            ser_port.write(message.encode()) # Codifica el mensaje a bytes
-            logging.debug(f"Enviado a Arduino: {message.strip()}") # strip() para no loguear el '\n'
+            message = f"{command}\n" 
+            ser_port.write(message.encode()) 
+            logging.debug(f"Enviado a Arduino: {message.strip()}") 
             if command == '1':
                 print("Servo: MOVING")
             elif command == '0':
                 print("Servo: STOPPED")
-            time.sleep(0.02) # Pequeño delay después de enviar para dar tiempo a Arduino a procesar
+            time.sleep(0.02) 
             return True
         except Exception as e:
             logging.error(f"Error al enviar comando '{command}' a Arduino: {e}", exc_info=True)
@@ -102,9 +102,7 @@ def read_arduino_feedback(ser_port):
         try:
             feedback = ser_port.readline().decode().strip()
             if feedback:
-                print(f"[ARDUINO]: {feedback}") # Siempre imprime el mensaje crudo para depuración
-
-                # Parse specific servo feedback messages from Arduino
+                print(f"[ARDUINO]: {feedback}") 
                 if feedback.startswith("[START_ANGLE]:"):
                     parts = feedback.split(":")[1:]
                     if len(parts) == 2 and parts[0].startswith("S1=") and parts[1].startswith("S2="):
@@ -123,7 +121,6 @@ def read_arduino_feedback(ser_port):
                         angle1 = parts[0].split("=")[1]
                         angle2 = parts[1].split("=")[1]
                         print(f"     [Servo Info]: S1 a: {angle1}°, S2 a: {angle2}° (Movimiento aleatorio)")
-                # Add more conditions for other Arduino debug messages if needed
                 
                 logging.debug(f"Recibido de Arduino: {feedback}")
         except Exception as e:
@@ -161,8 +158,6 @@ def play_audio_and_control_servo(file_path, ser_port, servo_home_angle_concept=0
         return False
 
     try:
-        # 1. Enviar comando para INICIAR el movimiento aleatorio en Arduino
-        # El Arduino moverá los servos a su HOME_ANGLE interno y luego iniciará el movimiento aleatorio.
         if ser_port:
             if not send_servo_command(ser_port, '1'):
                 logging.warning("No se pudo iniciar el movimiento del servo antes de reproducir el audio.")
@@ -173,26 +168,23 @@ def play_audio_and_control_servo(file_path, ser_port, servo_home_angle_concept=0
         logging.info(f"Reproduciendo audio: {full_path}")
         print(f"Reproduciendo: {full_path}")
         
-        # 3. Esperar a que el audio termine y leer feedback de Arduino
+
         while pygame.mixer.music.get_busy():
-            read_arduino_feedback(ser_port) # <-- Leer feedback mientras el audio suena
-            time.sleep(0.1) # Pequeña pausa para no consumir mucha CPU
+            read_arduino_feedback(ser_port) 
+            time.sleep(0.1) 
         
         logging.info(f"Audio '{full_path}' terminado.")
         print(f"Audio '{full_path}' terminado.")
         
-        # 4. Enviar comando para DETENER el movimiento aleatorio en Arduino
-        # El Arduino regresará los servos a su HOME_ANGLE interno.
         if ser_port:
             if not send_servo_command(ser_port, '0'):
                 logging.warning("No se pudo detener el servo después de reproducir el audio.")
                 
-        return True # Audio reproducido y servo controlado con éxito
+        return True
     
     except Exception as e:
         logging.error(f"Error durante la reproducción de audio y control del servo para '{full_path}': {e}", exc_info=True)
         print(f"Error al reproducir '{full_path}': {e}")
-        # Si ocurre un error, asegúrate de enviar el comando de detener al servo
         if ser_port:
             send_servo_command(ser_port, '0')
         return False
@@ -204,7 +196,6 @@ def speak_text(text):
 
 def play_sound_effect(file_path):
     """Reproduce un efecto de sonido sin controlar el servo (no bloqueante)."""
-    # Usamos os.path.join para construir la ruta completa del archivo de audio
     full_path = os.path.join(script_dir, file_path)
 
     if not os.path.exists(full_path):
@@ -212,7 +203,7 @@ def play_sound_effect(file_path):
         print(f"Advertencia: El efecto de sonido '{full_path}' no existe.")
         return False
     try:
-        sound = pygame.mixer.Sound(full_path) # Usar Sound para efectos cortos
+        sound = pygame.mixer.Sound(full_path) 
         sound.play()
         logging.debug(f"Reproduciendo efecto: {full_path}")
         return True
@@ -223,7 +214,6 @@ def play_sound_effect(file_path):
 
 # --- Bucle principal del programa ---
 if __name__ == "__main__":
-    # 1. Inicializar Audio de Pygame
     if not init_pygame_mixer():
         print("No se pudo iniciar el sistema de audio. Saliendo.")
         exit()
@@ -231,12 +221,11 @@ if __name__ == "__main__":
     # 2. Abrir Puerto Serial de Arduino
     arduino = open_serial_port(ARDUINO_PORT, BAUD_RATE)
     
-    # Asegurarse de que el servo esté parado al inicio (por si el Arduino se reinicia)
     if arduino:
         send_servo_command(arduino, '0')
         time.sleep(0.5) # Pequeña pausa para que el servo se asiente
 
-    # --- Bucle externo infinito para reiniciar el programa ---
+
     while True:
         # --- LÓGICA DE ACTIVACIÓN: Esperar la frase de activación ---
         print("\nPrograma listo, esperando la frase clave 'sombrero seleccionador'...")
@@ -271,46 +260,43 @@ if __name__ == "__main__":
                 
                 time.sleep(1) # Pausa para no saturar el bucle
 
-        # --- Bucle principal del programa (Solo se ejecuta después de la activación) ---
         print("\n¡Bienvenido al Sombrero Seleccionador!")
         logging.info("Iniciando secuencia del Sombrero Seleccionador.")
 
-        # Reproduce el audio de inicio y controla el servo automáticamente
         print("Reproduciendo audio de bienvenida...")
         play_audio_and_control_servo(os.path.join('voice', 'welcome', 'sombreo_inicio.mp3'), arduino, servo_home_angle_concept=0) 
 
         try:
             intentos = 0
-            max_intentos = 3 # Número máximo de intentos antes de salir
+            max_intentos = 3 
             while True:
-                # Leer feedback de Arduino continuamente en el bucle principal
                 if not pygame.mixer.music.get_busy(): 
                     read_arduino_feedback(arduino)
 
                 with mic as source:
                     print("\n🎤 Di tu nombre:")
                     recognizer.adjust_for_ambient_noise(source)
-                    try: # Añadido timeout para evitar esperas infinitas si no hay voz
+                    try: 
                         audio = recognizer.listen(source, timeout=5, phrase_time_limit=5)
                     except sr.WaitTimeoutError:
                         print("No se detectó voz. Reintentando...")
                         intentos += 1
                         if intentos >= max_intentos:
                             logging.warning("Máximo de intentos de escucha alcanzado. Saliendo.")
-                            break # Salir del bucle interno
+                            break 
                         
-                        # --- MODIFICACIÓN: Reproducir audio de error secuencial ---
+
                         error_audio_path = os.path.join('voice', 'error', f'sombreo_error_{intentos}.mp3')
                         print(f"Reproduciendo audio de error: {error_audio_path}")
                         if not play_audio_and_control_servo(error_audio_path, arduino, servo_home_angle_concept=0):
                              print(f"⚠️ Error al reproducir audio de error y controlar el servo.")
                         
-                        continue # Volver a intentar escuchar
+                        continue 
 
                     try:
                         nombre = recognizer.recognize_google(audio, language="es-ES")
                         print(f"👂 Escuché: {nombre}")
-                        nombre_formateado = nombre.title() # Pone la primera letra de cada palabra en mayúscula
+                        nombre_formateado = nombre.title() 
 
                         if nombre_formateado in nombres_y_mesas:
                             # --- Lógica para nombres específicos (Silvia y Jorge) ---
@@ -318,28 +304,27 @@ if __name__ == "__main__":
                                 print("Reproduciendo audio de Silvia")
                                 if not play_audio_and_control_servo(os.path.join('voice', 'SilviaJorge', 'silvia_final.mp3'), arduino, servo_home_angle_concept=0):
                                     print(f"⚠️ Error al reproducir audio de Silvia y controlar el servo.")
-                                time.sleep(1) # Pausa entre audios
+                                time.sleep(1) 
                                 if not play_audio_and_control_servo(os.path.join('voice', 'table', 'MESA_1.mp3'), arduino, servo_home_angle_concept=0):
                                     print(f"⚠️ Error al reproducir audio de MESA_1 y controlar el servo.")
                             elif nombre_formateado == "Jorge Lozano Lozano":
                                 print("Reproduciendo audio de Jorge")
                                 if not play_audio_and_control_servo(os.path.join('voice', 'SilviaJorge', 'jorge_final.mp3'), arduino, servo_home_angle_concept=0):
                                     print(f"⚠️ Error al reproducir audio de Jorge y controlar el servo.")
-                                time.sleep(1) # Pausa entre audios
+                                time.sleep(1) 
                                 if not play_audio_and_control_servo(os.path.join('voice', 'table', 'mesa_2.mp3'), arduino, servo_home_angle_concept=0):
                                     print(f"⚠️ Error al reproducir audio de mesa_2 y controlar el servo.")
-                            # --- Lógica general para otras casas/mesas ---
                             else:
                                 casa, mesa = nombres_y_mesas[nombre_formateado]
                                 print(f"✔️ Nombre reconocido: {nombre_formateado}, Casa: {casa}, Mesa: {mesa}")
                                 logging.info(f"Nombre reconocido: {nombre_formateado}, Casa: {casa}, Mesa: {mesa}")
 
-                                # Reproduce el audio de la casa y controla el servo
+
                                 audio_casa_path = os.path.join('voice', 'house', f"{casa}_audio.mp3") 
                                 if not play_audio_and_control_servo(audio_casa_path, arduino, servo_home_angle_concept=0):
                                     print(f"⚠️ Error al reproducir audio de casa: {audio_casa_path}. Posible desincronización del servo.")
 
-                                time.sleep(0.5) # Pequeña pausa entre audios si lo necesitas
+                                time.sleep(0.5) 
 
                                 # Reproduce el audio de la mesa y controla el servo
                                 audio_mesa_path = os.path.join('voice', 'table', f"{mesa}.mp3")
@@ -381,28 +366,26 @@ if __name__ == "__main__":
                     except sr.RequestError as e:
                         logging.error(f"Error al solicitar resultados del servicio de reconocimiento de voz de Google; {e}", exc_info=True)
                         print(f"❌ Error al conectar con el servicio de voz de Google; {e}")
-                        time.sleep(2) # Esperar un poco antes de reintentar
-                        # No incrementamos intentos por problemas de red
+                        time.sleep(2) 
         
         except KeyboardInterrupt:
             print("\nPrograma interrumpido por el usuario (Ctrl+C).")
             logging.info("Programa interrumpido por usuario.")
-            break # Salir del bucle externo para limpiar y finalizar
+            break 
 
         except Exception as e:
             logging.critical(f"Error inesperado en el bucle principal de reconocimiento: {e}", exc_info=True)
             print(f"Error inesperado: {e}")
-            break # Salir ante cualquier otro error crítico
+            break 
     
     # --- PROCESO DE LIMPIEZA FINAL ---
     logging.info("Iniciando proceso de limpieza final.")
-    # Asegurarse de detener servo y audio al finalizar o salir
     if arduino:
         print("Enviando comando de parada a Arduino...")
         send_servo_command(arduino, '0') # Comando final para detener el servo
         time.sleep(0.5)
         close_serial_port(arduino)
-    pygame.mixer.quit() # Apagar el mezclador de Pygame
+    pygame.mixer.quit()
     logging.info("Pygame mixer apagado.")
     print("Pygame mixer apagado.")
     print("Programa finalizado.")
