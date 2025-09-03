@@ -26,7 +26,7 @@ engine.setProperty('volume', 0.9)
 
 # --- Configuración del Puerto Serial de Arduino ---
 # ARDUINO_PORT = 'COM4' 
-ARDUINO_PORT = '/dev/ttyACM0' 
+ARDUINO_PORT = '/dev/ttyACM0'
 BAUD_RATE = 9600
 
 arduino = None 
@@ -387,14 +387,14 @@ if __name__ == "__main__":
                             # --- Lógica para nombres específicos (Silvia y Jorge) ---
                             if nombre_formateado == "Silvia Martín":
                                 print("Reproduciendo audio de Silvia")
-                                if not play_audio_and_control_servo(os.path.join('voice', 'SilviaJorge', 'silvia_final.mp3'), arduino, servo_home_angle_concept=0):
+                                if not play_audio_and_control_servo(os.path.join('voice', 'SilviaJorge', 'Silvia_final.mp3'), arduino, servo_home_angle_concept=0):
                                     print(f"⚠️ Error al reproducir audio de Silvia y controlar el servo.")
                                 time.sleep(1) 
                                 if not play_audio_and_control_servo(os.path.join('voice', 'table', 'mesa_13.mp3'), arduino, servo_home_angle_concept=0):
                                     print(f"⚠️ Error al reproducir audio de MESA_1 y controlar el servo.")
                             elif nombre_formateado == "Jorge Gardón":
                                 print("Reproduciendo audio de Jorge")
-                                if not play_audio_and_control_servo(os.path.join('voice', 'SilviaJorge', 'jorge_final.mp3'), arduino, servo_home_angle_concept=0):
+                                if not play_audio_and_control_servo(os.path.join('voice', 'SilviaJorge', 'Jorge_final.mp3'), arduino, servo_home_angle_concept=0):
                                     print(f"⚠️ Error al reproducir audio de Jorge y controlar el servo.")
                                 time.sleep(1) 
                                 if not play_audio_and_control_servo(os.path.join('voice', 'table', 'mesa_13.mp3'), arduino, servo_home_angle_concept=0):
