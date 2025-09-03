@@ -384,7 +384,7 @@ if __name__ == "__main__":
 
                         if nombre_formateado in nombres_y_mesas:
                             # --- Lógica para nombres específicos (Silvia y Jorge) ---
-                            if nombre_formateado == "Silvia Martín Díaz":
+                            if nombre_formateado == "Silvia Martín":
                                 print("Reproduciendo audio de Silvia")
                                 if not play_audio_and_control_servo(os.path.join('voice', 'SilviaJorge', 'silvia_final.mp3'), arduino, servo_home_angle_concept=0):
                                     print(f"⚠️ Error al reproducir audio de Silvia y controlar el servo.")
