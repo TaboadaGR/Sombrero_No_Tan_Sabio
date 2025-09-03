@@ -25,19 +25,20 @@ engine.setProperty('rate', 180)
 engine.setProperty('volume', 0.9) 
 
 # --- Configuración del Puerto Serial de Arduino ---
-ARDUINO_PORT = 'COM4' 
+# ARDUINO_PORT = 'COM4' 
+ARDUINO_PORT = '/dev/ttyACM0'
 BAUD_RATE = 9600
 
 arduino = None 
 
 # --- Configuración de Nombres y Mesas ---
 nombres_y_mesas = {
-    "Jorge Gardón": ("Gryffindor", "mesa_13"),
+    "Jorge Gardón": ("Slytherin", "mesa_13"),
     "Silvia Martín": ("Ravenclaw", "mesa_13"),
     "Agustín Martín": ("Gryffindor", "mesa_13"),
-    "Silvia Díaz": ("Hufflepuff", "mesa_13"),
-    "Yolanda Gardón": ("Muggle", "mesa_13"),
-    "Maria Angustias Gardón": ("Ravenclaw", "mesa_1"),
+    "Silvia Díaz": ("Gryffindor", "mesa_13"),
+    "Yolanda Gardón": ("Slytherin", "mesa_13"),
+    "Maria Angustias Gardón": ("Hufflepuff", "mesa_1"),
     "Jose Manuel Ramirez": ("Hufflepuff", "mesa_1"),
     "Rosa Gardón": ("Hufflepuff", "mesa_1"),
     "Carmen Clavero": ("Muggle", "mesa_1"),
@@ -49,14 +50,14 @@ nombres_y_mesas = {
     "Ramón Gardón": ("Slytherin", "mesa_1"),
     "Rocío Sánchez": ("Slytherin", "mesa_1"),
     "Carmen Gardón": ("Slytherin", "mesa_1"),
-    "Maribel Díaz": (None, "mesa_2"),
+    "Maribel Díaz": ("Slytherin", "mesa_2"),
     "José Antonio Frías": ("Gryffindor", "mesa_2"),
     "Mario Díaz": ("Hufflepuff", "mesa_2"),
     "Belén Quesada": ("Hufflepuff", "mesa_2"),
     "Maria del Carmen Díaz": ("Muggle", "mesa_2"),
     "Maria Reyes Díaz": ("Hufflepuff", "mesa_2"),
     "Juan de Dios Ariza": ("Hufflepuff", "mesa_2"),
-    "Iván Martín": ("Slytherin", "mesa_3"),
+    "Iván Martín": ("Gryffindor", "mesa_3"),
     "Maria Werfel": ("Ravenclaw", "mesa_3"),
     "Daniel Ariza": ("Gryffindor", "mesa_3"),
     "Claudia Ramal": ("Gryffindor", "mesa_3"),
@@ -82,15 +83,15 @@ nombres_y_mesas = {
     "Paco Aguilar": ("Hufflepuff", "mesa_5"),
     "Antonio Lachica": (None, "mesa_5"),
     "Javier Gallegos": ("Muggle", "mesa_5"),
-    "Inmaculada Morillas": ("Hufflepuff", "mesa_5"),
+    "Inmaculada Morillas": ("Ravenclaw", "mesa_5"),
     "Silvia": ("Slytherin", "mesa_5"),
-    "Isabel Arnau": ("Slytherin", "mesa_5"),
-    "Francisco Romero": ("Gryffindor", "mesa_6"),
+    "Isabel Arnau": ("Hufflepuff", "mesa_5"),
+    "Francisco Romero": ("Hufflepuff", "mesa_6"),
     "Jorge Lemus": ("Gryffindor", "mesa_6"),
     "David Bermejo": ("Hufflepuff", "mesa_6"),
     "David Guerra": ("Ravenclaw", "mesa_6"),
     "Ysmary Gil": ("Slytherin", "mesa_6"),
-    "Victoria Sofia Guerra": ("Slytherin", "mesa_6"),
+    "Victoria Sofia Guerra": ("Ravenclaw", "mesa_6"),
     "Juan Carbonell": ("Gryffindor", "mesa_6"),
     "Irene Burgos": ("Gryffindor", "mesa_7"),
     "Noemí Fernández": ("Hufflepuff", "mesa_7"),
@@ -112,7 +113,7 @@ nombres_y_mesas = {
     "Jose Antonio Sánchez": ("Gryffindor", "mesa_8"),
     "Marta Sánchez": ("Gryffindor", "mesa_8"),
     "David": ("Muggle", "mesa_8"),
-    "Alvaro David Taboada": ("Slytherin", "mesa_9"),
+    "Alvaro Taboada": ("Slytherin", "mesa_9"),
     "Lucía Fernández": ("Hufflepuff", "mesa_9"),
     "Esteban Fernández": ("Slytherin", "mesa_9"),
     "Jorge Zapata": ("Ravenclaw", "mesa_9"),
@@ -125,9 +126,9 @@ nombres_y_mesas = {
     "Raúl Romero": ("Hufflepuff", "mesa_10"),
     "Marta Rodriguez": ("Gryffindor", "mesa_10"),
     "Alexander Vas": ("Gryffindor", "mesa_10"),
-    "Sandra Navarro": ("Hufflepuff", "mesa_10"),
+    "Sandra Navarro": ("Muggle", "mesa_10"),
     "Ricardo Cañuelo": ("Muggle", "mesa_10"),
-    "Marina Muñoz": ("Muggle", "mesa_10"),
+    "Marina Muñoz": ("Gryffindor", "mesa_10"),
     "Beni": ("Gryffindor", "mesa_10")
 }
 
@@ -386,14 +387,14 @@ if __name__ == "__main__":
                             # --- Lógica para nombres específicos (Silvia y Jorge) ---
                             if nombre_formateado == "Silvia Martín":
                                 print("Reproduciendo audio de Silvia")
-                                if not play_audio_and_control_servo(os.path.join('voice', 'SilviaJorge', 'silvia_final.mp3'), arduino, servo_home_angle_concept=0):
+                                if not play_audio_and_control_servo(os.path.join('voice', 'SilviaJorge', 'Silvia_final.mp3'), arduino, servo_home_angle_concept=0):
                                     print(f"⚠️ Error al reproducir audio de Silvia y controlar el servo.")
                                 time.sleep(1) 
                                 if not play_audio_and_control_servo(os.path.join('voice', 'table', 'mesa_13.mp3'), arduino, servo_home_angle_concept=0):
                                     print(f"⚠️ Error al reproducir audio de MESA_1 y controlar el servo.")
                             elif nombre_formateado == "Jorge Gardón":
                                 print("Reproduciendo audio de Jorge")
-                                if not play_audio_and_control_servo(os.path.join('voice', 'SilviaJorge', 'jorge_final.mp3'), arduino, servo_home_angle_concept=0):
+                                if not play_audio_and_control_servo(os.path.join('voice', 'SilviaJorge', 'Jorge_final.mp3'), arduino, servo_home_angle_concept=0):
                                     print(f"⚠️ Error al reproducir audio de Jorge y controlar el servo.")
                                 time.sleep(1) 
                                 if not play_audio_and_control_servo(os.path.join('voice', 'table', 'mesa_13.mp3'), arduino, servo_home_angle_concept=0):
