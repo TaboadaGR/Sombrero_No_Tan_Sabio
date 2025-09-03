@@ -25,7 +25,8 @@ engine.setProperty('rate', 180)
 engine.setProperty('volume', 0.9) 
 
 # --- Configuración del Puerto Serial de Arduino ---
-ARDUINO_PORT = 'COM4' 
+# ARDUINO_PORT = 'COM4' 
+ARDUINO_PORT = '/dev/ttyACM0' 
 BAUD_RATE = 9600
 
 arduino = None 
