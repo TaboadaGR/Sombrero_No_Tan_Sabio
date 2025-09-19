@@ -25,8 +25,8 @@ engine.setProperty('rate', 180)
 engine.setProperty('volume', 0.9) 
 
 # --- Configuración del Puerto Serial de Arduino ---
-# ARDUINO_PORT = 'COM4' 
-ARDUINO_PORT = '/dev/ttyACM0'
+#ARDUINO_PORT = '/dev/ttyACM0'
+ARDUINO_PORT = 'COM4'
 BAUD_RATE = 9600
 
 arduino = None 
@@ -333,7 +333,7 @@ if __name__ == "__main__":
                     if "sombrero seleccionador" in frase_detectada:
                         print("✔️ Frase clave detectada. ¡Iniciando el proceso de asignación!")
                         logging.info("Frase de activación detectada. Continuando con la asignación.")
-                        play_sound_effect(os.path.join('voice', 'fx', 'bell.mp3')) 
+                        # play_sound_effect(os.path.join('voice', 'fx', 'bell.mp3')) 
                         activacion_exitosa = True
                     else:
                         print("❌ Frase incorrecta. Intente de nuevo.")
