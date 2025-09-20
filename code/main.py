@@ -73,15 +73,21 @@ nombres_y_mesas = {
     "Javier Quirosa": ("Hufflepuff", "mesa_4"),
     "Marina Martín": ("Hufflepuff", "mesa_4"),
     "Estrella Quirosa": ("Slytherin", "mesa_4"),
-    "Javier Alvarez": ("Gryffindor", "mesa_4"),
-    "Aiden Alvarez": ("Gryffindor", "mesa_4"),
-    "Gillian Alvarez": ("Gryffindor", "mesa_4"),
+    "Javier Álvarez": ("Gryffindor", "mesa_4"),
+    "Aiden Álvarez": ("Gryffindor", "mesa_4"),
+    "Gillian Álvarez": ("Gryffindor", "mesa_4"),
     "Oliver Calvo": ("Gryffindor", "mesa_5"),
     "Ester Moreno": ("Hufflepuff", "mesa_5"),
     "Nil Calvo": ("Slytherin", "mesa_5"),
-    "Sión Calvo": ("Ravenclaw", "mesa_5"),
+    
+    "Sión Calvo": ("Ravenclaw", "mesa_5"), #---------------|
+    "Sion Calvo": ("Ravenclaw", "mesa_5"), #lo está pillando sin tilde sión
+    
     "Paco Aguilar": ("Hufflepuff", "mesa_5"),
-    "Antonio Lachica": ("Slytherin", "mesa_5"),
+    
+    "Antonio Lachica": ("Slytherin", "mesa_5"), #------------------------|
+    "Antonio La chica": ("Slytherin", "mesa_5"), # hay que separar el apellido en dos lachica
+    
     "Javier Gallegos": ("Ravenclaw", "mesa_5"),
     "Inmaculada Morillas": ("Ravenclaw", "mesa_5"),
     "Silvia": ("Slytherin", "mesa_5"),
@@ -90,7 +96,10 @@ nombres_y_mesas = {
     "Jorge Lemus": ("Ravenclaw", "mesa_6"),
     "David Bermejo": ("Gryffindor", "mesa_6"),
     "David Guerra": ("Gryffindor", "mesa_6"),
-    "Ysmari Gil": ("Hufflepuff", "mesa_6"),
+    
+    "ysmari Gil": ("Hufflepuff", "mesa_6"), #--------------|
+    "ismari Gil": ("Hufflepuff", "mesa_6"), #lo pilla con i latina ysmari
+    
     "Victoria Sofia Guerra": ("Ravenclaw", "mesa_6"),
     "Juan Carbonell": ("Slytherin", "mesa_6"),
     "Irene Burgos": ("Gryffindor", "mesa_7"),
@@ -113,14 +122,17 @@ nombres_y_mesas = {
     "Jose Antonio Sánchez": ("Gryffindor", "mesa_8"),
     "Marta Sánchez": ("Hufflepuff", "mesa_8"),
     "David": ("Muggle", "mesa_8"),
-    "Alvaro Taboada": ("Slytherin", "mesa_9"),
+    "Álvaro Taboada": ("Slytherin", "mesa_9"),
     "Lucía Fernández": ("Hufflepuff", "mesa_9"),
     "Esteban Fernández": ("Slytherin", "mesa_9"),
     "Jorge Zapata": ("Ravenclaw", "mesa_9"),
     "Celia Hernández": ("Ravenclaw", "mesa_9"),
     "Julián Fernández": ("Hufflepuff", "mesa_9"),
     "Miguel Córdoba": ("Hufflepuff", "mesa_9"),
-    "Belén Gázquez": ("Hufflepuff", "mesa_9"),
+    
+    "Belén": ("Hufflepuff", "mesa_9"), #--------------|
+    "Belén vázquez": ("Hufflepuff", "mesa_9"),# belen gazquez
+    
     "Patricio Martinez": ("Muggle", "mesa_9"),
     "Pablo Lozano": ("Hufflepuff", "mesa_9"),
     "Raúl Romero": ("Hufflepuff", "mesa_10"),
@@ -129,7 +141,9 @@ nombres_y_mesas = {
     "Sandra Navarro": ("Muggle", "mesa_10"),
     "Ricardo Cañuelo": ("Muggle", "mesa_10"),
     "Marina Muñoz": ("Gryffindor", "mesa_10"),
-    "Beni": ("Gryffindor", "mesa_10")
+    
+    "Beni": ("Gryffindor", "mesa_10"), #--------------|
+    "Benny": ("Gryffindor", "mesa_10") # beni hay que pasarlo a benny
 }
 
 # --- Inicialización del Reconocimiento de Voz ---
@@ -333,7 +347,7 @@ if __name__ == "__main__":
                     if "sombrero seleccionador" in frase_detectada:
                         print("✔️ Frase clave detectada. ¡Iniciando el proceso de asignación!")
                         logging.info("Frase de activación detectada. Continuando con la asignación.")
-                        # play_sound_effect(os.path.join('voice', 'fx', 'bell.mp3')) 
+                        # play_sound_effect(os.path.join('voice', 'fx', 'bell.mp3')) no sabemos que es
                         activacion_exitosa = True
                     else:
                         print("❌ Frase incorrecta. Intente de nuevo.")
