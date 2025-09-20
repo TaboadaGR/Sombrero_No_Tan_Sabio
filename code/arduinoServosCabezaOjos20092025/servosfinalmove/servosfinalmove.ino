@@ -15,7 +15,7 @@ const int ANGLE_STOP = 90;         // <--- CAMBIO AQUÍ: Ángulo de inicio/parad
 
 // Variables para el control de tiempo del movimiento aleatorio
 unsigned long lastRandomMoveTime = 0;
-const long RANDOM_MOVE_INTERVAL = 250; // Mover cada 100 milisegundos (ajusta a tu gusto)
+const long RANDOM_MOVE_INTERVAL = 50; // Mover cada 100 milisegundos (ajusta a tu gusto)
 
 // Variable de estado para saber si los servos deben estar moviéndose aleatoriamente
 bool isMovingRandomly = false;
